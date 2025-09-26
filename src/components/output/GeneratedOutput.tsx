@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { useMemo, useCallback, useState, useRef } from 'react';
+import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react';
 import { FileText, Stethoscope, ShieldCheck, Activity, BrainCircuit, CheckSquare, Sparkles, Trash2, Download, Pencil, AlertTriangle, Lightbulb, Loader2, PencilRuler, PlusCircle, Save, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -89,7 +89,7 @@ const PlaceholderEditor = ({
     };
     
     return (
-        <span onFocus={handleFocus} className="inline-flex items-center gap-1 group/placeholder">
+        <span onFocus={handleFocus} className="inline-flex items-center gap-1 group/placeholder min-w-0">
             <Pencil className="w-3 h-3 text-primary/70"/>
             <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                 <PopoverTrigger asChild>
@@ -99,7 +99,7 @@ const PlaceholderEditor = ({
                         value={line.placeholderContent}
                         onChange={(e) => onLineChange(section, line.id, e.target.value)}
                         placeholder={line.placeholderContent}
-                        className="placeholder-input"
+                        className="placeholder-input min-w-0"
                         style={{ width: `${Math.max((line.placeholderContent || '').length, 10)}ch` }}
                     />
                 </PopoverTrigger>
@@ -276,13 +276,13 @@ const EditableSection = ({
                     newSection.lines.push(newLine);
                 }
             } else if (acc.length > 0) {
-                 acc[acc.length - 1].lines.push(line);
+                 acc[acc.length - 1]!.lines.push(line);
             }
             return acc;
         }, [] as { title: string, lines: EditableSectionContent }[]);
 
         return (
-             <div>
+             <div className="min-w-0">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-lg font-semibold flex items-center gap-2">
                       <Icon className="w-5 h-5 text-primary" />
@@ -295,7 +295,7 @@ const EditableSection = ({
                         {subsections.map((sub, index) => (
                             <AccordionItem value={sub.title} key={index}>
                                 <AccordionTrigger className="text-base font-semibold">{sub.title}</AccordionTrigger>
-                                <AccordionContent className="font-body text-sm leading-relaxed bg-background p-1 rounded-md border">
+                                <AccordionContent className="font-body text-sm leading-relaxed bg-background p-1 rounded-md border min-w-0">
                                     {sub.lines.length > 0 ? sub.lines.map(line => (
                                         <LineRenderer 
                                             key={line.id}
@@ -314,7 +314,7 @@ const EditableSection = ({
                     </Accordion>
                 ) : (
                     // Fallback to render all content if no subsections are found
-                    <div className="font-body text-sm leading-relaxed bg-background p-1 rounded-md border">
+                    <div className="font-body text-sm leading-relaxed bg-background p-1 rounded-md border min-w-0">
                         {content.map(line => (
                             <LineRenderer 
                                 key={line.id}
@@ -334,7 +334,7 @@ const EditableSection = ({
     }
 
     return (
-        <div>
+        <div className="min-w-0">
             <div className="flex items-center justify-between mb-2">
                 <h3 className="text-lg font-semibold flex items-center gap-2">
                     <Icon className="w-5 h-5 text-primary" />
@@ -371,7 +371,7 @@ const EditableSection = ({
                     autoFocus
                  />
             ) : (
-                <div className="font-body text-sm leading-relaxed bg-background p-1 rounded-md border min-h-[40px]">
+                <div className="font-body text-sm leading-relaxed bg-background p-1 rounded-md border min-h-[40px] min-w-0">
                     {content.map(line => (
                         <LineRenderer 
                             key={line.id}
